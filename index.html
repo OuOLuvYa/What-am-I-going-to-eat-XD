@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="從中原大學周邊 252 個美食地點，快速抽出今天要吃什麼。">
+  <title>中原三餐抽抽樂</title>
+  <style>
+    :root{--ink:#201b18;--paper:#fff8e8;--orange:#ff6b35;--yellow:#ffd166;--green:#5fad56;--blue:#4ea5d9;--pink:#f49ac2;--muted:#786d64;--line:#201b18;--shadow:5px 5px 0 var(--line)}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font-family:"Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif;background-image:radial-gradient(#e6d9bd 1px,transparent 1px);background-size:18px 18px}
+    button,input,select{font:inherit;color:inherit}button,a{touch-action:manipulation}.shell{width:min(1100px,calc(100% - 28px));margin:auto}
+    header{padding:28px 0 14px}.brand{display:flex;align-items:flex-end;justify-content:space-between;gap:20px}.eyebrow{font-weight:900;letter-spacing:.14em;color:var(--orange);font-size:.78rem}.brand h1{font-size:clamp(2.25rem,7vw,5.6rem);line-height:.88;margin:8px 0 12px;letter-spacing:-.07em}.brand h1 span{color:var(--orange);text-shadow:3px 3px 0 var(--ink)}.subtitle{max-width:600px;margin:0;color:var(--muted);font-weight:700}.stamp{flex:none;width:116px;height:116px;border:3px solid var(--ink);border-radius:50%;display:grid;place-items:center;text-align:center;font-weight:950;transform:rotate(8deg);background:var(--yellow);box-shadow:var(--shadow)}
+    .ticker{border-block:3px solid var(--ink);background:var(--green);overflow:hidden;margin:12px 0 22px}.ticker-track{white-space:nowrap;padding:9px 0;font-weight:950;letter-spacing:.08em;animation:ticker 22s linear infinite}@keyframes ticker{to{transform:translateX(-50%)}}
+    .grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(280px,.65fr);gap:22px}.panel{background:#fff;border:3px solid var(--ink);box-shadow:var(--shadow);border-radius:22px}.controls{padding:20px}.controls-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}.controls h2,.side h2{margin:0;font-size:1.15rem}.count-pill{background:var(--yellow);border:2px solid var(--ink);border-radius:999px;padding:6px 10px;font-size:.82rem;font-weight:900}
+    .filter-grid{display:grid;grid-template-columns:1.3fr .8fr;gap:12px}.field label{display:block;font-size:.75rem;font-weight:900;margin:0 0 6px;color:var(--muted);letter-spacing:.04em}.field input,.field select{width:100%;border:2px solid var(--ink);border-radius:12px;background:#fffdf6;padding:11px 12px;outline:none}.field input:focus,.field select:focus{box-shadow:0 0 0 4px #ffd16688}.switch-row{display:flex;gap:9px;margin-top:12px;flex-wrap:wrap}.chip{border:2px solid var(--ink);background:#fff;border-radius:999px;padding:8px 12px;font-weight:850;cursor:pointer}.chip[aria-pressed="true"]{background:var(--blue);box-shadow:3px 3px 0 var(--ink);transform:translate(-2px,-2px)}
+    .stage{min-height:390px;padding:24px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;background:linear-gradient(135deg,#fff 0 48%,#fff3cf 48% 52%,#fff 52%);position:relative;overflow:hidden}.stage:before,.stage:after{content:"✦";position:absolute;font-size:3rem;color:var(--yellow);-webkit-text-stroke:2px var(--ink)}.stage:before{left:28px;top:25px;transform:rotate(-15deg)}.stage:after{right:28px;bottom:18px;transform:rotate(20deg)}
+    .result-kicker{font-weight:950;color:var(--orange);letter-spacing:.12em;font-size:.8rem}.result-name{font-size:clamp(2rem,5vw,3.8rem);line-height:1.08;letter-spacing:-.05em;margin:12px auto;max-width:760px;overflow-wrap:anywhere}.result-category{display:inline-flex;gap:7px;align-items:center;background:var(--pink);border:2px solid var(--ink);border-radius:999px;padding:7px 12px;font-weight:900}.empty-note{color:var(--muted);font-weight:750;max-width:520px}
+    .actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:20px}.btn{border:3px solid var(--ink);border-radius:14px;padding:12px 18px;font-weight:950;text-decoration:none;cursor:pointer;background:#fff;box-shadow:4px 4px 0 var(--ink);transition:.12s transform,.12s box-shadow}.btn:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink)}.btn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}.btn-primary{background:var(--orange);color:#fff}.btn-map{background:var(--blue)}.btn-small{padding:8px 11px;border-width:2px;box-shadow:2px 2px 0 var(--ink);font-size:.83rem}
+    .roulette{margin:17px 0 0;width:min(100%,560px);height:50px;border:3px solid var(--ink);background:var(--ink);color:#fff;border-radius:12px;display:grid;place-items:center;overflow:hidden;font-size:1.1rem;font-weight:900}.roulette.spin span{animation:blur .11s linear infinite alternate}@keyframes blur{to{filter:blur(3px);transform:translateY(3px)}}
+    .side{padding:18px}.tabs{display:flex;border-bottom:2px solid var(--ink);margin-bottom:12px}.tab{flex:1;border:0;background:none;padding:10px 4px;font-weight:900;cursor:pointer}.tab.active{background:var(--yellow);border:2px solid var(--ink);border-bottom:0;border-radius:10px 10px 0 0;margin-bottom:-2px}.list{display:grid;gap:9px;max-height:590px;overflow:auto;padding:3px 5px 7px 2px}.item{border:2px solid var(--ink);border-radius:12px;padding:11px;background:#fffdf6;display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}.item strong{font-size:.91rem;line-height:1.3}.item small{display:block;color:var(--muted);margin-top:3px}.icon-btn{width:34px;height:34px;border:2px solid var(--ink);border-radius:50%;background:#fff;cursor:pointer;font-size:1rem}.icon-btn.on{background:var(--pink)}.list-empty{text-align:center;color:var(--muted);padding:44px 12px;font-weight:750}.side-footer{display:flex;justify-content:space-between;align-items:center;gap:8px;border-top:2px dashed #c9bda7;margin-top:12px;padding-top:12px;color:var(--muted);font-size:.75rem}
+    .info{margin:24px 0 46px;padding:22px;display:grid;grid-template-columns:1fr 1fr;gap:22px}.info h2{margin:0 0 8px}.info p,.info li{color:var(--muted);font-weight:650;line-height:1.65}.info ul{margin:0;padding-left:1.25rem}.source-link{color:var(--ink);font-weight:900}
+    .toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,130px);background:var(--ink);color:#fff;padding:11px 18px;border-radius:999px;font-weight:850;z-index:10;transition:.25s transform}.toast.show{transform:translate(-50%,0)}
+    @media(max-width:760px){.brand{align-items:flex-start}.stamp{width:84px;height:84px;font-size:.75rem}.grid{grid-template-columns:1fr}.filter-grid{grid-template-columns:1fr}.stage{min-height:360px;padding:22px 15px}.info{grid-template-columns:1fr}.side .list{max-height:420px}.brand h1{max-width:300px}.ticker-track{font-size:.82rem}}
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}.ticker-track,.roulette.spin span{animation:none!important}.btn{transition:none}}
+  </style>
+</head>
+<body>
+  <header class="shell">
+    <div class="brand">
+      <div><div class="eyebrow">CYCU FOOD ROULETTE · 2026</div><h1>中原三餐<br><span>抽抽樂！</span></h1><p class="subtitle">選擇困難不用怕。從中原大學周邊美食清單中，抽出今天命中注定的那一家。</p></div>
+      <div class="stamp">來源清單<br>252 個地點</div>
+    </div>
+  </header>
+  <div class="ticker" aria-hidden="true"><div class="ticker-track">今天吃什麼？ ✦ 中原夜市 ✦ 早餐午餐晚餐宵夜 ✦ 不要再說隨便了 ✦ 今天吃什麼？ ✦ 中原夜市 ✦ 早餐午餐晚餐宵夜 ✦ 不要再說隨便了 ✦ </div></div>
+
+  <main class="shell">
+    <section class="grid">
+      <div>
+        <div class="panel controls">
+          <div class="controls-title"><h2>先給我一點線索</h2><span class="count-pill" id="poolCount">251 家可抽</span></div>
+          <div class="filter-grid">
+            <div class="field"><label for="search">店名關鍵字</label><input id="search" type="search" placeholder="例如：咖哩、牛肉麵、早餐…" autocomplete="off"></div>
+            <div class="field"><label for="category">想吃的類型</label><select id="category"><option value="全部">全部都可以</option></select></div>
+          </div>
+          <div class="switch-row"><button class="chip" id="favoriteOnly" type="button" aria-pressed="false">♡ 只抽收藏</button><button class="chip" id="noRepeat" type="button" aria-pressed="true">✓ 避開近期重複</button><button class="chip" id="resetFilters" type="button">清除條件</button></div>
+        </div>
+
+        <div class="panel stage" aria-live="polite">
+          <div class="result-kicker" id="resultKicker">READY TO EAT</div>
+          <h2 class="result-name" id="resultName">今天，交給運氣決定。</h2>
+          <span class="result-category" id="resultCategory">🍽️ 251 家候選</span>
+          <div class="roulette" id="roulette"><span>按下按鈕開始抽選</span></div>
+          <div class="actions">
+            <button class="btn btn-primary" id="drawBtn" type="button">🎲 幫我抽一家</button>
+            <button class="btn" id="favResult" type="button" hidden>♡ 收藏</button>
+            <button class="btn" id="skipResult" type="button" hidden>✕ 這家先不要</button>
+            <a class="btn btn-map" id="mapBtn" href="#" target="_blank" rel="noopener" hidden>↗ Google Maps</a>
+          </div>
+        </div>
+      </div>
+
+      <aside class="panel side">
+        <div class="tabs" role="tablist"><button class="tab active" data-tab="favorites" role="tab">收藏 <span id="favCount">0</span></button><button class="tab" data-tab="history" role="tab">最近抽選</button></div>
+        <div class="list" id="sideList"></div>
+        <div class="side-footer"><span>資料只存在你的瀏覽器</span><button class="btn btn-small" id="clearData" type="button">重設紀錄</button></div>
+      </aside>
+    </section>
+
+    <section class="panel info" id="about">
+      <div><h2>這個網站在做什麼？</h2><p>「中原三餐抽抽樂」使用公開的 Google Maps「大學三餐」清單作為靈感與資料來源。系統會依店名關鍵字自動分類，再從符合條件且未被排除的店家中隨機推薦。</p><a class="source-link" href="https://maps.app.goo.gl/DZoWWycPeMpfBRPC9" target="_blank" rel="noopener">查看原始 Google Maps 清單 ↗</a></div>
+      <div><h2>互動功能</h2><ul><li>搜尋與餐點類型篩選</li><li>隨機抽選及動畫回饋</li><li>收藏、暫時排除與避免近期重複</li><li>最近 12 次抽選紀錄</li><li>localStorage 保存個人偏好</li><li>手機與電腦響應式介面</li></ul></div>
+    </section>
+  </main>
+  <div class="toast" id="toast" role="status"></div>
+
+  <script>
+    const RAW = `
+薯食好吃（馬鈴薯煎餅）
+沐塔義式料理 中原外帶專賣店
+Hội An Quán 會安小館
+咔滋脆皮肉圓
+不平帆湯包排骨酥
+食霸 重慶麻辣火鍋
+現炸脆皮肉圓
+雞乘五 鹹酥雞 | 薄皮湯翅 | 魷魚 | 炸物專賣店
+布里偷
+大滿貫功夫鍋
+高品雞肉飯
+福神愛吃糖
+東東麵館
+北平麵食館
+泰城泰式涼拌小吃
+福隆月台便當 (中壢 - 中北店)
+好客胡椒餅
+莊記客家麵飯館
+三商巧福 中壢中原門市
+爭鮮迴轉壽司-中壢柏昶店
+打爆豬韓式燒肉吃到飽桃園中壢店
+すき家 SUKIYA 中壢中原店
+橫濱牛排 中壢中山東路店
+泰嶼Thai-island Bistro 餐酒館 泰式料理
+出神燒肉咖哩 TRANCE Yakiniku Curry
+中原可可熊
+好好早午餐
+茶曉伊 茶飲專賣－中壢中原店
+中原麵疙瘩
+陸予Logic Tea & 舞麥-飲品｜桌遊｜甜點
+排排坐 茶飲輕食
+斷腸人之大腸包小腸
+中原勇伯油飯
+尚味豆漿
+廣東脆皮腸粉
+SUNNY.3西班牙油條—中原店
+泰愛了 手工泰式奶茶 桃園中原店
+大漢草原 新彊羊肉串
+深海魷魚頭-炸物專門店
+阿榮四神湯刈包
+蘇記大腸包小腸（中原店）
+黑武藏10元壽司
+大A基隆廟口營養三明治起司香雞排
+一品香便當
+今晩吃糖
+原鄉人綜合甘草芭樂
+白毛炭烤(白毛阿伯)中原店/台式炭烤/啤酒
+林 永 方｜手工湯包·麵線- 創始總店-中壢美食 中壢湯包 中原夜市美食
+Chick輕客鹹水雞 中原店｜店休以官方Line為主
+Good丼ㄦ
+元良鍋飲
+50嵐 中壢中原店
+墨竹亭 燃麵本家 中壢中原店
+中原活蝦
+遇米則發(中原店)碳烤玉米
+李薯薯黃金薯-中原店
+雨林 法式甜點x客製化蛋糕
+李記台中脆皮臭豆腐
+寶島8號雞排-中原店
+爆料鍋燒魚
+燒章君
+享檸專業手打檸檬茶
+老師傅牛肉麵
+十二段鍋物堂 | 桃園中壢店
+億品鍋-中壢環中旗艦店
+佰元鍋(中原店)
+摩斯漢堡 中壢環中店
+林炫州匠麻辣燙-中原店
+強尼兄弟健康廚房 中原店
+鐵三中螺螄粉 中原店
+486飯麵館（不定期公休
+上原海鮮
+八方來便當
+貝蛤蝦-鍋燒意麵
+囍勒烤
+韓老爺台式拌麵．中壢中原店
+土司森林手作晨食
+君隆牛肉麵
+八里香鹽酥雞-中原店
+漢堡樹-中原店
+多滋漢堡
+紅茶洋行 新中北店
+義匠義式湯麵-中壢慈惠店
+晨美好輕食早午餐
+Bar-Code Matcha&Bistro
+後半夜生魚片
+大全聯 中壢店
+木子白麻辣燙-中壢中原店
+焱 鐵板燒
+家庭水餃大王
+Verona 義式餐廳
+韓一館
+鍋泰暖。泰式南洋火鍋-桃園中壢店
+阿亮魯肉飯
+玩逗樹咖啡-中原店
+Mr.May義式百匯 中壢店
+霸味羊肉爐-環中店
+好漢莊甕子雞
+麥當勞-中壢環中東餐廳－設有得來速
+火車頭海鮮
+三顧茅廬麻辣滷味 中壢中北店
+饗樂樂獨享鍋-中原店
+パパ漢堡（88 Burger)
+灶腳排骨
+粥大福-中壢中山店
+小木屋鬆餅 中壢中原店
+酒生閣
+郝記廣東粥
+一品香滷味
+拉亞漢堡 中壢弘揚
+吾栖 Home Bistro
+姐妹麵館
+就那個布朗尼the one brownies 外帶甜點店
+宜珍快餐
+漢堡邦 中原大仁店
+丸冰 maru's ice
+沐樂食堂 中原店
+達樂早午餐 中原店
+帕思比義式坊中原店
+陽光煎匙-中原店
+茶學苑 Tea Arts | 中原必喝的飲料店｜中原大學｜飲料推薦｜中原夜市｜飲料外送｜桃園中壢手搖飲料店｜
+拿坡里披薩 中原店
+肯德基KFC-中壢環中東二店餐廳
+麥當勞-中壢中原餐廳
+文化早點
+夢想起飛早午餐宵夜
+泗元碳烤-中原碳烤
+超牛牛排-中壢本店
+留一手 手工麵線
+天地咖哩Daddy's Curry(中原店)
+豐慶食堂
+小泰國海南雞飯
+泰楊 泰式料理
+開源社香雞排（中壢中北路店）（中原店）
+好咖 Thai
+爆嗨雞球
+一生懸雞 中原店
+胖老爹美式炸雞 中壢中原店
+胖嘟嘟現炸湯翅
+炸雞的行家-半雞八兩中壢中原店
+中原夜市
+御冠園鮮肉湯包專賣店
+開運屋地瓜球QQ蛋
+韓雞飢韓式炸雞專門店-中原夜市總店
+Plan Bee小蜜蜂手工豆花
+加一減一甜點店
+兔子的森林甜點.森うさぎのスイーツ
+低欸賣甜點的
+雪糕早午餐
+晨食司控/中壢美食/餐廳/早午餐/吐司盒專賣/桃園美食推薦
+晨間廚房 中壢中原店
+咖哩老師中原店-中壢美食-餐廳-炸豬排-可樂餅
+軟蛋醬 蛋包飯專門製作所 桃園中原店
+歐內斯特廚房
+純i串燒販賣所-中原店
+永祿小吃麵飯
+田董生炒鴨肉羹 美食 小吃
+中圓粥品&鍋燒
+香知有素
+22burger茶餐館
+Chaup!轉角冰-中原店
+饗越食堂
+饗食天堂 桃園中壢店
+潘許先生 無心飲控俱樂部
+學生餐廳
+七香印度香料餐廳 7Spices Bharat Masala's Indian Restaurant
+尋MEAT炭火燒肉
+臭一臭 現蒸臭豆腐
+大衛美墨料理 David Diner
+隨主飡法式水煮專賣-中原店
+得來素素食餐飲-中壢中原店
+LAZY BIRD雷利彼德美式餐廳
+酉客棧 유주막 U Chicken Bistro
+早啊早餐店
+高記老牌紅心粉圓店
+沙郎嘿韓式餐廳
+州味涼麵 (Marita’s Filipino Restaurant)
+阿尼基美式餐廳 中壢店（最後出餐時間19:30
+武田信玄
+康櫻廣東粥/美食/restaurants/小吃/takeout
+一抹鹽一點糖
+MAJO麻久豚食屋|極致火候厚切炸豬排
+洪記豆漿大王
+筱芸永和豆漿大王
+永和豆漿
+涮乃葉 中壢中山東路店
+綠野鮮蹤
+鬼匠拉麵中原店
+初樂 板烤吐司（店休公告最新動態）
+有點東西
+中原美食麵享享牛肉麵/豚骨拉麵（豆花豆漿）六日下午有營業
+福州乾拌麵
+源香拌麵(福州乾拌麵)中原店
+八方雲集-中壢中原店
+八鍋燒
+888大水餃
+八方雲集-中壢弘揚店
+286信實水餃
+286水餃中原店
+平價水餃麵食館
+御鼎牛排創意料理
+豪秋吐司｜自做自售五盎司純豬漢堡排
+嘉香麵飯粥
+PAPAFUN趴趴樂パパ楽「桃園中壢.別無分店」90分鐘自助吧放題
+炸G行家（美式炸雞）-中原店
+攪攪風味小火鍋—中壢中原店-中壢平價火鍋|小火鍋推薦|必吃火鍋|在地推薦火鍋|聚餐餐廳|中原大學附近餐廳推薦|必吃餐廳|人氣餐廳
+羽之鍋-中壢
+德式披薩
+滝神 平價生魚片丼飯
+路邊烤肉WildBBQ 桃園中原店（桃園中壢區必吃宵夜／中壢平價美食串燒推薦／桃園家庭聚餐餐廳推薦）
+薰衣草-韓式海苔飯捲
+丼心丼中原總店
+隹又隹咖哩·玩具·古物
+黑宅拉麵
+麵屋杉貝｜𝐒𝐔𝐆𝐈𝐊𝐀𝐈
+肉麻訣 -中壢中原店
+泰美味
+口味kǒuwèi創意料理
+小而大餃子館
+大中原滷味-新中北店
+小雞食代早午餐 炒泡麵
+集英會牛肉麵館(中原店)中壢美食 中壢牛肉麵 中壢小吃 中原夜市美食 中原夜市小吃 中原夜市牛肉麵
+大嗑蔬菜蛋餅-中原大學店
+好哄HAO HONG-中壢外帶義大利麵|平價義大利麵|必吃義大利麵|義式燉飯|炸物推薦|輕食沙拉餐|在地推薦餐廳
+阿福港式炸雞
+韓奶奶-韓式豆腐鍋物（中原代表店）
+弘揚水餃牛肉麵館
+9分滿·日式關東煮·麻辣燙
+艾隆義式麵食館
+Nimes尼姆複合式餐飲
+麻子辣蒙古麻辣燙 中壢中原店
+古早味魷魚羹專賣店
+麵心無界(營業時間不固定/來店前請先傳訊粉絲專頁)
+小米義式廚房
+兆邑現炒館
+KiKi Garden 義大利麵
+六品閣 麵食館
+中壢中原夜市趙喜妹-叫你來吃麵！！中原夜市小吃、中原美食。
+八哥重慶酸辣粉 中原夜市美食店
+金蘭小吃
+大頭擄胃
+孫東寶台式牛排教父 中壢日新店
+大埔鐵板燒 中壢日新店
+韓巷粉食小吃（店休請見FB.IG)
+董記牛肉捲餅
+極 黃燜雞米飯 中原店
+京の樁日式拉麵
+Cozzi Market 逸·市集
+冒大仙冒菜麻辣燙 中壢中原店
+鱻漁生魚片
+中福鍋燒麵
+南桃吳記 蛤蜊麵
+`.trim().split('\n').map(s=>s.trim()).filter(Boolean);
+
+    const CLOSED = new Set(['沐塔義式料理 中原外帶專賣店']);
+    const rules = [
+      ['早餐', '🌞', /早餐|早午餐|早點|晨食|晨間|豆漿|土司|吐司|蛋餅|三明治/i],
+      ['飲料甜點', '🧋', /茶|飲|甜點|豆花|蛋糕|冰|糖|粉圓|鬆餅|布朗尼|可可|芭樂|油條/i],
+      ['鍋物麻辣', '🍲', /鍋|麻辣|冒菜|羊肉爐|關東煮/i],
+      ['麵飯水餃', '🍜', /麵|飯|粥|水餃|餃子|腸粉|咖哩|便當|丼|壽司/i],
+      ['炸物燒烤', '🍗', /炸|烤|串燒|鹹酥|雞排|地瓜球|肉圓|臭豆腐/i],
+      ['異國料理', '🌏', /泰|韓|義式|義大利|美式|印度|墨|法式|Bistro|Restaurant|SUKIYA|披薩/i],
+      ['素食健康', '🥬', /素食|有素|健康|蔬菜|水煮/i]
+    ];
+    function classify(name){for(const [label,emoji,re] of rules)if(re.test(name))return {label,emoji};return {label:'其他美食',emoji:'🍽️'}}
+    const restaurants = RAW.map((name,id)=>({id,name,...classify(name),closed:CLOSED.has(name)})).filter(x=>!x.closed);
+    const categories = ['全部',...new Set(restaurants.map(x=>x.label))];
+    const $ = s=>document.querySelector(s);
+    const state = {
+      favorites:new Set(JSON.parse(localStorage.getItem('cycu-favorites')||'[]')),
+      skipped:new Set(JSON.parse(localStorage.getItem('cycu-skipped')||'[]')),
+      history:JSON.parse(localStorage.getItem('cycu-history')||'[]'),
+      result:null,tab:'favorites',drawing:false
+    };
+    const els={search:$('#search'),category:$('#category'),pool:$('#poolCount'),favOnly:$('#favoriteOnly'),noRepeat:$('#noRepeat'),name:$('#resultName'),kicker:$('#resultKicker'),cat:$('#resultCategory'),roulette:$('#roulette'),draw:$('#drawBtn'),favResult:$('#favResult'),skipResult:$('#skipResult'),map:$('#mapBtn'),list:$('#sideList'),favCount:$('#favCount'),toast:$('#toast')};
+    categories.forEach(c=>els.category.add(new Option(c==='全部'?'全部都可以':`${classify(c).emoji||'•'} ${c}`,c)));
+
+    function save(){localStorage.setItem('cycu-favorites',JSON.stringify([...state.favorites]));localStorage.setItem('cycu-skipped',JSON.stringify([...state.skipped]));localStorage.setItem('cycu-history',JSON.stringify(state.history));}
+    function getPool(){const q=els.search.value.trim().toLowerCase(),cat=els.category.value,recent=new Set(els.noRepeat.getAttribute('aria-pressed')==='true'?state.history.slice(0,5):[]);return restaurants.filter(r=>(!q||r.name.toLowerCase().includes(q))&&(cat==='全部'||r.label===cat)&&(els.favOnly.getAttribute('aria-pressed')!=='true'||state.favorites.has(r.id))&&!state.skipped.has(r.id)&&!recent.has(r.id));}
+    function updatePool(){const n=getPool().length;els.pool.textContent=`${n} 家可抽`;if(!state.result)els.cat.textContent=`🍽️ ${n} 家候選`;}
+    function toast(msg){els.toast.textContent=msg;els.toast.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>els.toast.classList.remove('show'),1600)}
+    function toggleChip(el){el.setAttribute('aria-pressed',el.getAttribute('aria-pressed')!=='true');updatePool()}
+    function mapUrl(name){return 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(name+' 中原大學');}
+    function display(r){state.result=r;els.kicker.textContent='今天就吃這家！';els.name.textContent=r.name;els.cat.textContent=`${r.emoji} ${r.label}`;els.map.href=mapUrl(r.name);els.map.hidden=els.favResult.hidden=els.skipResult.hidden=false;els.favResult.textContent=state.favorites.has(r.id)?'♥ 已收藏':'♡ 收藏';els.favResult.classList.toggle('btn-primary',state.favorites.has(r.id));}
+    function draw(){if(state.drawing)return;const pool=getPool();if(!pool.length){els.name.textContent='沒有符合條件的店家';els.cat.textContent='請放寬條件或清除排除名單';toast('候選清單是空的');return}state.drawing=true;els.draw.disabled=true;els.roulette.classList.add('spin');let ticks=0;const timer=setInterval(()=>{const r=pool[Math.floor(Math.random()*pool.length)];els.roulette.firstElementChild.textContent=r.name;ticks++;if(ticks>=18){clearInterval(timer);els.roulette.classList.remove('spin');const picked=pool[Math.floor(Math.random()*pool.length)];els.roulette.firstElementChild.textContent='決定！';state.history=[picked.id,...state.history.filter(id=>id!==picked.id)].slice(0,12);display(picked);save();renderList();updatePool();state.drawing=false;els.draw.disabled=false;els.draw.textContent='🎲 再抽一家';}},70)}
+    function renderList(){els.favCount.textContent=state.favorites.size;const ids=state.tab==='favorites'?[...state.favorites]:state.history;const rows=ids.map(id=>restaurants.find(r=>r.id===id)).filter(Boolean);if(!rows.length){els.list.innerHTML=`<div class="list-empty">${state.tab==='favorites'?'還沒有收藏。<br>抽到喜歡的店就按下愛心吧！':'還沒有抽選紀錄。<br>第一餐會是誰呢？'}</div>`;return}els.list.innerHTML=rows.map(r=>`<div class="item"><div><strong>${escapeHtml(r.name)}</strong><small>${r.emoji} ${r.label}</small></div><button class="icon-btn ${state.favorites.has(r.id)?'on':''}" data-fav="${r.id}" title="切換收藏">${state.favorites.has(r.id)?'♥':'♡'}</button></div>`).join('')}
+    function escapeHtml(s){return s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+    els.draw.addEventListener('click',draw);els.search.addEventListener('input',updatePool);els.category.addEventListener('change',updatePool);els.favOnly.addEventListener('click',()=>toggleChip(els.favOnly));els.noRepeat.addEventListener('click',()=>toggleChip(els.noRepeat));
+    $('#resetFilters').addEventListener('click',()=>{els.search.value='';els.category.value='全部';els.favOnly.setAttribute('aria-pressed','false');els.noRepeat.setAttribute('aria-pressed','true');state.skipped.clear();save();updatePool();toast('條件已清除')});
+    els.favResult.addEventListener('click',()=>{if(!state.result)return;const id=state.result.id;state.favorites.has(id)?state.favorites.delete(id):state.favorites.add(id);save();display(state.result);renderList();updatePool();toast(state.favorites.has(id)?'已加入收藏':'已取消收藏')});
+    els.skipResult.addEventListener('click',()=>{if(!state.result)return;state.skipped.add(state.result.id);save();toast('這家今天先跳過');draw()});
+    document.querySelectorAll('.tab').forEach(tab=>tab.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));tab.classList.add('active');state.tab=tab.dataset.tab;renderList()}));
+    els.list.addEventListener('click',e=>{const b=e.target.closest('[data-fav]');if(!b)return;const id=Number(b.dataset.fav);state.favorites.has(id)?state.favorites.delete(id):state.favorites.add(id);save();renderList();updatePool()});
+    $('#clearData').addEventListener('click',()=>{state.favorites.clear();state.skipped.clear();state.history=[];save();renderList();updatePool();toast('收藏與紀錄已重設')});
+    renderList();updatePool();
+  </script>
+</body>
+</html>
